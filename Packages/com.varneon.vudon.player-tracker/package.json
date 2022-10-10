@@ -1,10 +1,10 @@
 {
-  "name": "com.varneon.vudon.repository-template",
-  "displayName": "VUdon - Repository Template",
+  "name": "com.varneon.vudon.player-tracker",
+  "displayName": "VUdon - Player Tracker",
   "version": "0.0.1",
   "unity": "2019.4",
   "unityRelease": "29f1",
-  "description": "Template repository for VUdon packages",
+  "description": "Tracker prefab for providing tracked transforms on the local player's TrackingData or bones",
   "author": {
     "name": "Varneon",
     "url": "https://github.com/Varneon"
