@@ -2,7 +2,7 @@
 
 namespace Varneon.VUdon.PlayerTracker
 {
-    [DefaultExecutionOrder(-2146483648)]
+    [DefaultExecutionOrder(-100000000)] // Noclip + 900000000
     public class PlayerTracker : Abstract.PlayerTracker
     {
 
