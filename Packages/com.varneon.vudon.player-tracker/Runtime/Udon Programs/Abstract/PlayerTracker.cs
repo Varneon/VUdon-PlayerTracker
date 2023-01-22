@@ -84,7 +84,7 @@ namespace Varneon.VUdon.PlayerTracker.Abstract
             }
         }
 
-        public override void PostLateUpdate()
+        private void LateUpdate()
         {
             if (trackHead)
             {
@@ -108,7 +108,10 @@ namespace Varneon.VUdon.PlayerTracker.Abstract
                 leftHandTracker.SetPositionAndRotation(leftHandTD.position, leftHandTD.rotation);
                 rightHandTracker.SetPositionAndRotation(rightHandTD.position, rightHandTD.rotation);
             }
+        }
 
+        public override void PostLateUpdate()
+        {
             if (trackIndexFingers)
             {
                 leftIndexFingerTracker.position = localPlayer.GetBonePosition(leftIndexFingerFurthestBone);
