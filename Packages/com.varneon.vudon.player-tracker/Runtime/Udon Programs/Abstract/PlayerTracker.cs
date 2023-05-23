@@ -84,7 +84,7 @@ namespace Varneon.VUdon.PlayerTracker.Abstract
             }
         }
 
-        public override void PostLateUpdate()
+        private void LateUpdate()
         {
             if (trackHead)
             {
@@ -102,10 +102,16 @@ namespace Varneon.VUdon.PlayerTracker.Abstract
 
             if (trackHands)
             {
-                leftHandTracker.position = localPlayer.GetTrackingData(TD_TYPE_LEFTHAND).position;
-                rightHandTracker.position = localPlayer.GetTrackingData(TD_TYPE_RIGHTHAND).position;
-            }
+                VRCPlayerApi.TrackingData leftHandTD = localPlayer.GetTrackingData(TD_TYPE_LEFTHAND);
+                VRCPlayerApi.TrackingData rightHandTD = localPlayer.GetTrackingData(TD_TYPE_RIGHTHAND);
 
+                leftHandTracker.SetPositionAndRotation(leftHandTD.position, leftHandTD.rotation);
+                rightHandTracker.SetPositionAndRotation(rightHandTD.position, rightHandTD.rotation);
+            }
+        }
+
+        public override void PostLateUpdate()
+        {
             if (trackIndexFingers)
             {
                 leftIndexFingerTracker.position = localPlayer.GetBonePosition(leftIndexFingerFurthestBone);
