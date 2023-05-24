@@ -1,7 +1,7 @@
 {
   "name": "com.varneon.vudon.player-tracker",
   "displayName": "VUdon - Player Tracker",
-  "version": "0.1.0",
+  "version": "0.2.0-alpha.1",
   "unity": "2019.4",
   "unityRelease": "29f1",
   "description": "Tracker prefab for providing tracked transforms on the local player's TrackingData or bones",
