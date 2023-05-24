@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c333ccfdd0cbdbc4ca30cef2dd6e6b9b, type: 3}
   m_Name: CapsuleColliderVisualizer
   m_EditorClassIdentifier: 
-  serializedUdonProgramAsset: {fileID: 11400000, guid: dd658e6cdc882cc4a9ac226d586101b9,
+  serializedUdonProgramAsset: {fileID: 11400000, guid: ab5e4fb9c79dc6d44b3737fc2008d70f,
     type: 2}
   udonAssembly: 
   assemblyError: 
