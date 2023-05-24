@@ -18,7 +18,7 @@
   },
   "vpmDependencies": {
     "com.vrchat.udonsharp": "1.x.x",
-    "com.varneon.vudon.editors": ">=0.1.0 <0.2.0",
+    "com.varneon.vudon.editors": ">=0.1.0-alpha.5 <0.2.0",
     "com.varneon.vudon.logger": ">=0.3.0",
     "com.varneon.vudon.player-scale-utility": ">=0.1.0-beta.1"
   }
