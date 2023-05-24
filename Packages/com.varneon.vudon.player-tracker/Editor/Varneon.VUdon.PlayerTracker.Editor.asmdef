@@ -1,7 +1,11 @@
 {
     "name": "Varneon.VUdon.PlayerTracker.Editor",
     "references": [
-        "Varneon.VUdon.PlayerTracker.Runtime"
+        "Varneon.VUdon.PlayerTracker.Runtime",
+        "Varneon.VUdon.Editors.Editor",
+        "Varneon.VUdon.Editors.Runtime",
+        "Varneon.VUdon.PlayerScaleUtility.Runtime",
+        "UdonSharp.Runtime"
     ],
     "includePlatforms": [
         "Editor"
