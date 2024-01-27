@@ -222,7 +222,7 @@ namespace Varneon.VUdon.PlayerTracker
             BONE_LEFT_INDEX_DISTAL = HumanBodyBones.LeftIndexDistal,
             BONE_RIGHT_INDEX_DISTAL = HumanBodyBones.RightIndexDistal;
 
-        private const string LOG_PREFIX = "[<color=#FF9600>ConfigurablePlayerTracker</color>]: ";
+        private const string LOG_PREFIX = "[<color=#ABC>VUdon</color>][<color=#FF9600>ConfigurablePlayerTracker</color>] ";
 
         private const float VISUALIZER_DURATION = 5f;
 
