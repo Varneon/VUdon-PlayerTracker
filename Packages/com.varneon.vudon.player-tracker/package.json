@@ -14,12 +14,12 @@
     "com.vrchat.worlds": "3.4.0",
     "com.varneon.vudon.editors": "0.1.0",
     "com.varneon.vudon.logger": "0.3.0",
-    "com.varneon.vudon.player-scale-utility": "0.1.0"
+    "com.varneon.vudon.player-scale-utility": "0.1.2"
   },
   "vpmDependencies": {
-    "com.varneon.vudon.editors": ">=0.1.0-alpha.5 <0.2.0",
     "com.vrchat.worlds": ">=3.4.0 <4.0.0",
+    "com.varneon.vudon.editors": ">=0.1.0-alpha.8 <0.2.0",
     "com.varneon.vudon.logger": ">=0.3.0",
-    "com.varneon.vudon.player-scale-utility": ">=0.1.0-beta.1"
+    "com.varneon.vudon.player-scale-utility": ">=0.1.2-beta.1"
   }
 }
