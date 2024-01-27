@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using System;
 using System.Linq;
 using UdonSharp;
 using UnityEngine;
@@ -582,6 +583,27 @@ namespace Varneon.VUdon.PlayerTracker
             {
                 visualizer.SetActive(active);
             }
+        }
+
+        [PublicAPI]
+        public bool TryGetTracker(TrackerType type, out Transform tracker)
+        {
+            switch (type)
+            {
+                case TrackerType.Head: tracker = headTracker; break;
+                case TrackerType.HandLeft: tracker = leftHandTracker; break;
+                case TrackerType.HandRight: tracker = rightHandTracker; break;
+                case TrackerType.IndexFingerLeft: tracker = leftIndexFingerTracker; break;
+                case TrackerType.IndexFingerRight: tracker = rightIndexFingerTracker; break;
+                case TrackerType.FootLeft: tracker = leftFootTracker; break;
+                case TrackerType.FootRight: tracker = rightFootTracker; break;
+                default:
+                    Debug.LogWarningFormat("{0}TrackerType '<color=#FEDCBA>{1}</color>' is not compatible with ConfigurablePlayerTracker!", LOG_PREFIX, type);
+                    tracker = null;
+                    break;
+            }
+
+            return tracker != null;
         }
 
         private void Log(string message)
