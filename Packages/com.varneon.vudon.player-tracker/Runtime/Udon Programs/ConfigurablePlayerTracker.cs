@@ -187,10 +187,6 @@ namespace Varneon.VUdon.PlayerTracker
 
         private VRCPlayerApi localPlayer;
 
-        private Vector3
-            handPosLeft,
-            handPosRight;
-
         private CapsuleCollider
             leftIndexCollider,
             rightIndexCollider,
@@ -344,11 +340,13 @@ namespace Varneon.VUdon.PlayerTracker
             {
                 VRCPlayerApi.TrackingData td = localPlayer.GetTrackingData(TD_TYPE_HEAD);
 
-                headTracker.SetPositionAndRotation(td.position, td.rotation);
+                Quaternion rotation = td.rotation;
+
+                headTracker.SetPositionAndRotation(td.position, rotation);
 
                 if (smoothHeadRotation)
                 {
-                    lastHeadProxyRotation = Quaternion.RotateTowards(lastHeadProxyRotation, td.rotation, Time.deltaTime * headSmoothingSpeed * Quaternion.Angle(lastHeadProxyRotation, td.rotation));
+                    lastHeadProxyRotation = Quaternion.RotateTowards(lastHeadProxyRotation, rotation, Time.deltaTime * headSmoothingSpeed * Quaternion.Angle(lastHeadProxyRotation, rotation));
 
                     headTrackerSmoothedProxy.rotation = lastHeadProxyRotation;
                 }
@@ -359,11 +357,8 @@ namespace Varneon.VUdon.PlayerTracker
                 VRCPlayerApi.TrackingData leftHandTD = localPlayer.GetTrackingData(TD_TYPE_LEFTHAND);
                 VRCPlayerApi.TrackingData rightHandTD = localPlayer.GetTrackingData(TD_TYPE_RIGHTHAND);
 
-                handPosLeft = leftHandTD.position;
-                handPosRight = rightHandTD.position;
-
-                leftHandTracker.SetPositionAndRotation(handPosLeft, leftHandTD.rotation);
-                rightHandTracker.SetPositionAndRotation(handPosRight, rightHandTD.rotation);
+                leftHandTracker.SetPositionAndRotation(leftHandTD.position, leftHandTD.rotation);
+                rightHandTracker.SetPositionAndRotation(rightHandTD.position, rightHandTD.rotation);
             }
         }
 
