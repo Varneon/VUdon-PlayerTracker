@@ -9,6 +9,8 @@ using VRC.SDKBase;
 
 namespace Varneon.VUdon.PlayerTracker
 {
+    [AddComponentMenu("")]
+    [DisallowMultipleComponent]
     [DefaultExecutionOrder(-100000000)] // Noclip + 900000000
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class ConfigurablePlayerTracker : PlayerScaleUtility.Abstract.PlayerScaleCallbackReceiver
