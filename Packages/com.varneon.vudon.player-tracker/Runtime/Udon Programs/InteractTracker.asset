@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c333ccfdd0cbdbc4ca30cef2dd6e6b9b, type: 3}
   m_Name: InteractTracker
   m_EditorClassIdentifier: 
-  serializedUdonProgramAsset: {fileID: 11400000, guid: ecdb48287f263ca44ad51d6d14f5a591,
+  serializedUdonProgramAsset: {fileID: 11400000, guid: 3e4a14b31a954bc42984c4c485898bbc,
     type: 2}
   udonAssembly: 
   assemblyError: 

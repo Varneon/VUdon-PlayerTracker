@@ -222,6 +222,8 @@ namespace Varneon.VUdon.PlayerTracker
 
         private const float VISUALIZER_DURATION = 5f;
 
+        private readonly Vector3 VECTOR3_ZERO = Vector3.zero;
+
         [NonSerialized]
         internal Mesh avatarMesh;
 
@@ -449,7 +451,7 @@ namespace Varneon.VUdon.PlayerTracker
 
         public void CheckAvailableBones()
         {
-            isNotHumanoid = localPlayer.GetBonePosition(HumanBodyBones.Hips).Equals(Vector3.zero);
+            isNotHumanoid = localPlayer.GetBonePosition(HumanBodyBones.Hips).Equals(VECTOR3_ZERO);
 
             // Player is not humanoid and bones can't be tracked
             if (isNotHumanoid)
@@ -459,20 +461,20 @@ namespace Varneon.VUdon.PlayerTracker
                 return;
             }
 
-            hasLeftIndex = !localPlayer.GetBonePosition(BONE_LEFT_INDEX_INTERMEDIATE).Equals(Vector3.zero);
-            hasRightIndex = !localPlayer.GetBonePosition(BONE_RIGHT_INDEX_INTERMEDIATE).Equals(Vector3.zero);
+            hasLeftIndex = !localPlayer.GetBonePosition(BONE_LEFT_INDEX_INTERMEDIATE).Equals(VECTOR3_ZERO);
+            hasRightIndex = !localPlayer.GetBonePosition(BONE_RIGHT_INDEX_INTERMEDIATE).Equals(VECTOR3_ZERO);
 
-            hasLeftIndexDistal = !localPlayer.GetBonePosition(BONE_LEFT_INDEX_DISTAL).Equals(Vector3.zero);
-            hasRightIndexDistal = !localPlayer.GetBonePosition(BONE_RIGHT_INDEX_DISTAL).Equals(Vector3.zero);
+            hasLeftIndexDistal = !localPlayer.GetBonePosition(BONE_LEFT_INDEX_DISTAL).Equals(VECTOR3_ZERO);
+            hasRightIndexDistal = !localPlayer.GetBonePosition(BONE_RIGHT_INDEX_DISTAL).Equals(VECTOR3_ZERO);
 
-            hasLeftLittleProximal = !localPlayer.GetBonePosition(HumanBodyBones.LeftLittleProximal).Equals(Vector3.zero);
-            hasRightLittleProximal = !localPlayer.GetBonePosition(HumanBodyBones.RightLittleProximal).Equals(Vector3.zero);
+            hasLeftLittleProximal = !localPlayer.GetBonePosition(HumanBodyBones.LeftLittleProximal).Equals(VECTOR3_ZERO);
+            hasRightLittleProximal = !localPlayer.GetBonePosition(HumanBodyBones.RightLittleProximal).Equals(VECTOR3_ZERO);
 
             leftKnuckleBottomBone = hasLeftLittleProximal ? HumanBodyBones.LeftLittleProximal : HumanBodyBones.LeftRingProximal;
             rightKnuckleBottomBone = hasRightLittleProximal ? HumanBodyBones.RightLittleProximal : HumanBodyBones.RightRingProximal;
 
-            bool hasLeftToes = !localPlayer.GetBonePosition(HumanBodyBones.LeftToes).Equals(Vector3.zero);
-            bool hasRightToes = !localPlayer.GetBonePosition(HumanBodyBones.RightToes).Equals(Vector3.zero);
+            bool hasLeftToes = !localPlayer.GetBonePosition(HumanBodyBones.LeftToes).Equals(VECTOR3_ZERO);
+            bool hasRightToes = !localPlayer.GetBonePosition(HumanBodyBones.RightToes).Equals(VECTOR3_ZERO);
 
             leftFootFurthestBone = hasLeftToes ? HumanBodyBones.LeftToes : HumanBodyBones.LeftFoot;
             rightFootFurthestBone = hasRightToes ? HumanBodyBones.RightToes : HumanBodyBones.RightFoot;

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c333ccfdd0cbdbc4ca30cef2dd6e6b9b, type: 3}
   m_Name: SphereColliderVisualizer
   m_EditorClassIdentifier: 
-  serializedUdonProgramAsset: {fileID: 11400000, guid: 8b396d1513e0a47469f84e3ffef08a1a,
+  serializedUdonProgramAsset: {fileID: 11400000, guid: 424d18cfc2301f94e8725c7ed0d88ec1,
     type: 2}
   udonAssembly: 
   assemblyError: 
