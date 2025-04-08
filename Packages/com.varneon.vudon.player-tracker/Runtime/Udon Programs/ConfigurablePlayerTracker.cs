@@ -9,33 +9,41 @@ using VRC.SDKBase;
 
 namespace Varneon.VUdon.PlayerTracker
 {
+    /// <summary>
+    /// Configurable utility script for tracking Transforms to the local player's body, e.g. HMD, hand controllers and feet
+    /// <para>Supports usage of interact tracker capsules on index fingers, knuckles and feet, providing a solution comparable to VRChat's Avatar Dynamics into worlds</para>
+    /// <para>Optionally physical collider proxies can also be enabled as well, allowing players to kick objects in VR fullbody for example</para>
+    /// </summary>
     [AddComponentMenu("")]
     [DisallowMultipleComponent]
     [DefaultExecutionOrder(-100000000)] // Noclip + 900000000
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class ConfigurablePlayerTracker : PlayerScaleUtility.Abstract.PlayerScaleCallbackReceiver
     {
+        [Tooltip("Should the player's head be tracked and tracker transform to be aligned to the same orientation")]
         [FoldoutHeader("Head")]
         [FieldLabel("Track Head TrackingData")]
         [SerializeField]
         internal bool trackHead = true;
 
-        [Tooltip("VRCPlayerApi.TrackingDataType.Head")]
+        [Tooltip("VRCPlayerApi.TrackingDataType.Head\n\nThis tracker's orientation will always match the player's HMD")]
         [FieldDisable(nameof(trackHead))]
         [FieldNullWarning]
         [SerializeField]
         internal Transform headTracker;
 
-        [Tooltip("Head but rotation is smoothed")]
+        [Tooltip("A child transform of head tracker which can be smoothed for comfort")]
         [FieldDisable(nameof(trackHead))]
         [FieldNullWarning]
         [SerializeField]
         internal Transform headTrackerSmoothedProxy;
 
+        [Tooltip("Should the head tracker's proxy transform's rotation be smoothed")]
         [FieldLabel("Proxy Rotation Smoothing")]
         [FieldDisable(nameof(trackHead))]
         public bool HeadProxyRotationSmoothing;
 
+        [Tooltip("How fast should the head rotation be smoothed\n\nNote: The default speed of 5 matches VRChat's steadycam in VR")]
         [FieldLabel("Smoothing Speed")]
         [SerializeField]
         [FieldRange(1f, 10f)]
@@ -46,24 +54,26 @@ namespace Varneon.VUdon.PlayerTracker
         [SerializeField]
         internal bool headTriggersInteractions = true;
 
+        [Tooltip("Should the hand controllers be tracked\n\nNote: This does not provide touch interactivity, only ability to parent objects to player's hands")]
         [FoldoutHeader("Hands (VR Only)")]
         [FieldLabel("Track Hand TrackingData")]
         [SerializeField]
         internal bool trackHands = true;
 
-        [Tooltip("VRCPlayerApi.TrackingDataType.LeftHand")]
+        [Tooltip("VRCPlayerApi.TrackingDataType.LeftHand\n\nThis Transform will always match player's left hand")]
         [FieldDisable(nameof(trackHands))]
         [FieldNullWarning]
         [SerializeField]
         internal Transform leftHandTracker;
 
-        [Tooltip("VRCPlayerApi.TrackingDataType.RightHand")]
+        [Tooltip("VRCPlayerApi.TrackingDataType.RightHand\n\nThis Transform will always match player's right hand")]
         [FieldDisable(nameof(trackHands))]
         [FieldNullWarning]
         [SerializeField]
         internal Transform rightHandTracker;
 
         [Space]
+        [Tooltip("Should the player's index fingers be tracked and trigger capsules to be aligned on them just like with VRChat's Avatar Dynamics\n\nThis provides touch interactivity with compatible implementations in the world utilizing TouchReceiver")]
         [FieldLabel("Track Index Finger Bones")]
         [SerializeField]
         internal bool trackIndexFingers = true;
@@ -81,24 +91,25 @@ namespace Varneon.VUdon.PlayerTracker
         internal Transform leftIndexFingerTracker;
 
         [Space]
+        [Tooltip("Should the player's knuckles be tracked and trigger capsules to be aligned on them just like with VRChat's Avatar Dynamics\n\nThis provides touch interactivity with compatible implementations in the world utilizing TouchReceiver")]
         [FieldLabel("Track Knuckle Bones")]
         [SerializeField]
         internal bool trackKnuckles = true;
 
+        [Tooltip("Nearly identical knuckle collider to VRChat's Avatar Dynamics")]
         [FieldDisable(nameof(trackKnuckles))]
         [FieldNullWarning]
         [SerializeField]
         internal Transform rightKnuckleTracker;
 
+        [Tooltip("Nearly identical knuckle collider to VRChat's Avatar Dynamics")]
         [FieldDisable(nameof(trackKnuckles))]
         [FieldNullWarning]
         [SerializeField]
         internal Transform leftKnuckleTracker;
 
-        /// <summary>
-        /// Should the physical hand collision proxies be active
-        /// </summary>
         [Space]
+        [Tooltip("Should the knuckles affect physics objects in the world\n\nNote: Touch interactivity is enabled by default above, this is an extension of it allowing the physics to be manipulated")]
         [FieldLabel("Physical Knuckle Collisions")]
         [FieldDisable(nameof(trackKnuckles))]
         [SerializeField]
@@ -117,41 +128,36 @@ namespace Varneon.VUdon.PlayerTracker
         internal Rigidbody leftKnucklePhysicsCollider;
 
         [FoldoutHeader("Feet (VR Only)")]
+        [Tooltip("Should the player's feet be tracked and trigger capsules to be aligned on them just like with VRChat's Avatar Dynamics\n\nThis provides touch interactivity with compatible implementations in the world utilizing TouchReceiver")]
         [FieldLabel("Track Foot Bones (+ Toes)")]
         [SerializeField]
         internal bool trackFeet = true;
 
+        [Tooltip("Transform to be aligned to the player's right foot")]
         [FieldDisable(nameof(trackFeet))]
         [FieldNullWarning]
         [SerializeField]
         internal Transform rightFootTracker;
 
+        [Tooltip("Transform to be aligned to the player's left foot")]
         [FieldDisable(nameof(trackFeet))]
         [FieldNullWarning]
         [SerializeField]
         internal Transform leftFootTracker;
 
-        /// <summary>
-        /// Should the physical foot collision proxies be active
-        /// </summary>
         [Space]
+        [Tooltip("Should the feet affect physics objects in the world\n\nNote: Touch interactivity is enabled by default above, this is an extension of it allowing the physics to be manipulated")]
         [FieldLabel("Physical Foot Collisions")]
         [FieldDisable(nameof(trackFeet))]
         [SerializeField]
         internal bool physicalFeet;
 
-        /// <summary>
-        /// Physical proxy collider for right foot
-        /// </summary>
         [Tooltip("Physical collision proxy for kicking physics objects with right foot")]
         [FieldDisable(nameof(physicalFeet), nameof(trackFeet))]
         [FieldNullWarning]
         [SerializeField]
         internal Rigidbody rightFootPhysicsCollider;
 
-        /// <summary>
-        /// Physical proxy collider for left foot
-        /// </summary>
         [Tooltip("Physical collision proxy for kicking physics objects with left foot")]
         [FieldDisable(nameof(physicalFeet), nameof(trackFeet))]
         [FieldNullWarning]
@@ -159,9 +165,13 @@ namespace Varneon.VUdon.PlayerTracker
         internal Rigidbody leftFootPhysicsCollider;
 
         [FoldoutHeader("Debug")]
+        [Tooltip("Optional VUdon Logger for viewing avatar configuration reports in game")]
         [SerializeField]
         private UdonLogger logger;
 
+        /// <summary>
+        /// Tracker visualizers which will be visible for couple seconds every time an avatar changes and the tracker recalibrates
+        /// </summary>
         [SerializeField, HideInInspector]
         private GameObject[] visualizers;
 
@@ -220,10 +230,16 @@ namespace Varneon.VUdon.PlayerTracker
 
         private const string LOG_PREFIX = "[<color=#ABC>VUdon</color>][<color=#FF9600>ConfigurablePlayerTracker</color>] ";
 
+        /// <summary>
+        /// How long should the tracker visualizers stay visible after recalibrating
+        /// </summary>
         private const float VISUALIZER_DURATION = 5f;
 
         private readonly Vector3 VECTOR3_ZERO = Vector3.zero;
 
+        /// <summary>
+        /// Reference to VRCSDK's default robot avatar mesh to be displayed in the editor as an example for where the trackers will be located on the player's body
+        /// </summary>
         [NonSerialized]
         internal Mesh avatarMesh;
 
