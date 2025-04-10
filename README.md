@@ -4,31 +4,28 @@
 
 </div>
 
-Tracker prefab for providing tracked transforms on the local player's TrackingData or bones
+Tracker prefab for providing tracked transforms on the local player's TrackingData and bones
+
+![image](https://github.com/user-attachments/assets/b3b544ce-3ab0-4e8a-8a96-3c4177e24d28)
 
 # Installation
 
 <details><summary>
 
-### Import with [VRChat Creator Companion](https://vcc.docs.vrchat.com/vpm/packages#user-packages):</summary>
+### Import with [VRChat Creator Companion](https://vcc.docs.vrchat.com/vpm/packages#user-packages)</summary>
 
-> 1. Download `com.varneon.vudon.player-tracker.zip` from [here](https://github.com/Varneon/VUdon-PlayerTracker/releases/latest)
-> 2. Unpack the .zip somewhere
-> 3. In VRChat Creator Companion, navigate to `Settings` > `User Packages` > `Add`
-> 4. Navigate to the unpacked folder, `com.varneon.vudon.player-tracker` and click `Select Folder`
-> 5. `VUdon - Player Tracker` should now be visible under `Local User Packages` in the project view in VRChat Creator Companion
-> 6. Click `Add`
+> Coming Soon™
 
 </details><details><summary>
 
-### Import with [Unity Package Manager (git)](https://docs.unity3d.com/2019.4/Documentation/Manual/upm-ui-giturl.html):</summary>
+### Import with [Unity Package Manager (git)](https://docs.unity3d.com/2019.4/Documentation/Manual/upm-ui-giturl.html)</summary>
 
 > 1. In the Unity toolbar, select `Window` > `Package Manager` > `[+]` > `Add package from git URL...` 
 > 2. Paste the following link: `https://github.com/Varneon/VUdon-PlayerTracker.git?path=/Packages/com.varneon.vudon.player-tracker`
 
 </details><details><summary>
 
-### Import from [Unitypackage](https://docs.unity3d.com/2019.4/Documentation/Manual/AssetPackagesImport.html):</summary>
+### Import from [Unitypackage](https://docs.unity3d.com/2019.4/Documentation/Manual/AssetPackagesImport.html)</summary>
 
 > 1. Download latest `com.varneon.vudon.player-tracker.unitypackage` from [here](https://github.com/Varneon/VUdon-PlayerTracker/releases/latest)
 > 2. Import the downloaded .unitypackage into your Unity project
@@ -39,8 +36,8 @@ Tracker prefab for providing tracked transforms on the local player's TrackingDa
 
 ## Developed by Varneon with :hearts:
 
-![Twitter Follow](https://img.shields.io/twitter/follow/Varneon?color=%231c9cea&label=%40Varneon&logo=Twitter&style=for-the-badge)
-![YouTube Channel Subscribers](https://img.shields.io/youtube/channel/subscribers/UCKTxeXy7gyaxr-YA9qGWOYg?color=%23FF0000&label=Varneon&logo=YouTube&style=for-the-badge)
-![GitHub followers](https://img.shields.io/github/followers/Varneon?color=%23303030&label=Varneon&logo=GitHub&style=for-the-badge)
+[![Twitter Follow](https://img.shields.io/static/v1?style=for-the-badge&label=@Varneon&message=7.7K&color=1b9df0&logo=twitter)](https://twitter.com/Varneon)
+[![YouTube Channel Subscribers](https://img.shields.io/youtube/channel/subscribers/UCKTxeXy7gyaxr-YA9qGWOYg?color=%23FF0000&label=Varneon&logo=YouTube&style=for-the-badge)](https://www.youtube.com/Varneon)
+[![GitHub followers](https://img.shields.io/github/followers/Varneon?color=%23303030&label=Varneon&logo=GitHub&style=for-the-badge)](https://github.com/Varneon)
 
 </div>
