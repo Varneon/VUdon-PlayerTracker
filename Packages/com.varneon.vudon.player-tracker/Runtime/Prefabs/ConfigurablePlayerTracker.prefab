@@ -2614,25 +2614,35 @@ MonoBehaviour:
   headSmoothingSpeed: 5
   headTriggersInteractions: 1
   trackHands: 1
-  leftHandTracker: {fileID: 2437812083174397390}
   rightHandTracker: {fileID: 4891087697115615368}
+  leftHandTracker: {fileID: 2437812083174397390}
   trackIndexFingers: 1
   rightIndexFingerTracker: {fileID: 4273883512549682167}
   leftIndexFingerTracker: {fileID: 8632266324655209274}
   trackKnuckles: 1
   rightKnuckleTracker: {fileID: 8260845460365196734}
   leftKnuckleTracker: {fileID: 8260845459831779267}
-  physicalHands: 1
-  rightKnucklePhysicsCollider: {fileID: 2176298902408007820}
-  leftKnucklePhysicsCollider: {fileID: 2176298902438054722}
+  physicalKnuckles: 1
+  rightKnuckleCollisionProxy: {fileID: 2176298902408007820}
+  leftKnuckleCollisionProxy: {fileID: 2176298902438054722}
   trackFeet: 1
   rightFootTracker: {fileID: 2176298903130630515}
   leftFootTracker: {fileID: 2176298903338068869}
   physicalFeet: 1
-  rightFootPhysicsCollider: {fileID: 2176298901540773565}
-  leftFootPhysicsCollider: {fileID: 2176298901658410399}
+  rightFootCollisionProxy: {fileID: 2176298901540773565}
+  leftFootCollisionProxy: {fileID: 2176298901658410399}
   logger: {fileID: 0}
   visualizers: []
+  leftIndexCollider: {fileID: 0}
+  rightIndexCollider: {fileID: 0}
+  leftKnuckleCollider: {fileID: 0}
+  rightKnuckleCollider: {fileID: 0}
+  leftFootCollider: {fileID: 0}
+  rightFootCollider: {fileID: 0}
+  leftKnucklePhysicsCollider: {fileID: 2176298902438054722}
+  rightKnucklePhysicsCollider: {fileID: 2176298902408007820}
+  leftFootPhysicsCollider: {fileID: 2176298901658410399}
+  rightFootPhysicsCollider: {fileID: 2176298901540773565}
 --- !u!114 &8260845460211881562
 MonoBehaviour:
   m_ObjectHideFlags: 0

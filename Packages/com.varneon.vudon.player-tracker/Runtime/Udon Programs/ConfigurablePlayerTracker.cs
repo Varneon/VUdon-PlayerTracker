@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using UdonSharp;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Varneon.VUdon.Editors;
 using Varneon.VUdon.Logger.Abstract;
 using VRC.SDKBase;
@@ -52,6 +53,7 @@ namespace Varneon.VUdon.PlayerTracker
 
         [Tooltip("Should the head collider trigger TouchReceivers")]
         [SerializeField]
+        [FieldDisable(nameof(trackHead))]
         internal bool headTriggersInteractions = true;
 
         [Tooltip("Should the hand controllers be tracked\n\nNote: This does not provide touch interactivity, only ability to parent objects to player's hands")]
@@ -60,17 +62,17 @@ namespace Varneon.VUdon.PlayerTracker
         [SerializeField]
         internal bool trackHands = true;
 
-        [Tooltip("VRCPlayerApi.TrackingDataType.LeftHand\n\nThis Transform will always match player's left hand")]
-        [FieldDisable(nameof(trackHands))]
-        [FieldNullWarning]
-        [SerializeField]
-        internal Transform leftHandTracker;
-
         [Tooltip("VRCPlayerApi.TrackingDataType.RightHand\n\nThis Transform will always match player's right hand")]
         [FieldDisable(nameof(trackHands))]
         [FieldNullWarning]
         [SerializeField]
         internal Transform rightHandTracker;
+
+        [Tooltip("VRCPlayerApi.TrackingDataType.LeftHand\n\nThis Transform will always match player's left hand")]
+        [FieldDisable(nameof(trackHands))]
+        [FieldNullWarning]
+        [SerializeField]
+        internal Transform leftHandTracker;
 
         [Space]
         [Tooltip("Should the player's index fingers be tracked and trigger capsules to be aligned on them just like with VRChat's Avatar Dynamics\n\nThis provides touch interactivity with compatible implementations in the world utilizing TouchReceiver")]
@@ -113,19 +115,22 @@ namespace Varneon.VUdon.PlayerTracker
         [FieldLabel("Physical Knuckle Collisions")]
         [FieldDisable(nameof(trackKnuckles))]
         [SerializeField]
-        internal bool physicalHands;
+        [FormerlySerializedAs("physicalHands")]
+        internal bool physicalKnuckles;
 
         [Tooltip("Physical collision proxy for pushing physics objects with right knuckle")]
-        [FieldDisable(nameof(physicalHands), nameof(trackKnuckles))]
+        [FieldDisable(nameof(physicalKnuckles), nameof(trackKnuckles))]
         [FieldNullWarning]
         [SerializeField]
-        internal Rigidbody rightKnucklePhysicsCollider;
+        [FormerlySerializedAs("rightKnucklePhysicsCollider")]
+        internal Rigidbody rightKnuckleCollisionProxy;
 
         [Tooltip("Physical collision proxy for pushing physics objects with left knuckle")]
-        [FieldDisable(nameof(physicalHands), nameof(trackKnuckles))]
+        [FieldDisable(nameof(physicalKnuckles), nameof(trackKnuckles))]
         [FieldNullWarning]
         [SerializeField]
-        internal Rigidbody leftKnucklePhysicsCollider;
+        [FormerlySerializedAs("leftKnucklePhysicsCollider")]
+        internal Rigidbody leftKnuckleCollisionProxy;
 
         [FoldoutHeader("Feet (VR Only)")]
         [Tooltip("Should the player's feet be tracked and trigger capsules to be aligned on them just like with VRChat's Avatar Dynamics\n\nThis provides touch interactivity with compatible implementations in the world utilizing TouchReceiver")]
@@ -156,13 +161,15 @@ namespace Varneon.VUdon.PlayerTracker
         [FieldDisable(nameof(physicalFeet), nameof(trackFeet))]
         [FieldNullWarning]
         [SerializeField]
-        internal Rigidbody rightFootPhysicsCollider;
+        [FormerlySerializedAs("rightFootPhysicsCollider")]
+        internal Rigidbody rightFootCollisionProxy;
 
         [Tooltip("Physical collision proxy for kicking physics objects with left foot")]
         [FieldDisable(nameof(physicalFeet), nameof(trackFeet))]
         [FieldNullWarning]
         [SerializeField]
-        internal Rigidbody leftFootPhysicsCollider;
+        [FormerlySerializedAs("leftFootPhysicsCollider")]
+        internal Rigidbody leftFootCollisionProxy;
 
         [FoldoutHeader("Debug")]
         [Tooltip("Optional VUdon Logger for viewing avatar configuration reports in game")]
@@ -197,13 +204,18 @@ namespace Varneon.VUdon.PlayerTracker
 
         private VRCPlayerApi localPlayer;
 
+        [SerializeField, HideInInspector]
         private CapsuleCollider
             leftIndexCollider,
             rightIndexCollider,
             leftKnuckleCollider,
             rightKnuckleCollider,
             leftFootCollider,
-            rightFootCollider;
+            rightFootCollider,
+            leftKnucklePhysicsCollider,
+            rightKnucklePhysicsCollider,
+            leftFootPhysicsCollider,
+            rightFootPhysicsCollider;
 
         private SphereCollider headCollider;
 
@@ -245,110 +257,76 @@ namespace Varneon.VUdon.PlayerTracker
 
         private void Start()
         {
-            if (trackHead = trackHead && headTracker)
+            if (!(localPlayer = Networking.LocalPlayer).IsUserInVR())
             {
-                smoothHeadRotation = HeadProxyRotationSmoothing && headTrackerSmoothedProxy != null;
-
-                headCollider = headTracker.GetComponent<SphereCollider>();
-            }
-
-            if ((localPlayer = Networking.LocalPlayer).IsUserInVR())
-            {
-                trackHands = trackHands && leftHandTracker && rightHandTracker;
-
-                if (trackIndexFingers = trackIndexFingers && leftIndexFingerTracker && rightIndexFingerTracker)
+                if (trackHands)
                 {
-                    leftIndexCollider = leftIndexFingerTracker.GetComponent<CapsuleCollider>();
-                    rightIndexCollider = rightIndexFingerTracker.GetComponent<CapsuleCollider>();
+                    trackHands = false;
+
+                    Destroy(leftHandTracker.gameObject);
+                    Destroy(rightHandTracker.gameObject);
                 }
 
-                if (trackKnuckles = trackKnuckles && leftKnuckleTracker && rightKnuckleTracker)
+                if (trackIndexFingers)
                 {
-                    leftKnuckleCollider = leftKnuckleTracker.GetComponent<CapsuleCollider>();
-                    rightKnuckleCollider = rightKnuckleTracker.GetComponent<CapsuleCollider>();
+                    trackIndexFingers = false;
+
+                    Destroy(leftIndexFingerTracker.gameObject);
+                    Destroy(rightIndexFingerTracker.gameObject);
                 }
 
-                if (trackFeet = trackFeet && leftFootTracker && rightFootTracker)
+                if (trackKnuckles)
                 {
-                    leftFootCollider = leftFootTracker.GetComponent<CapsuleCollider>();
-                    rightFootCollider = rightFootTracker.GetComponent<CapsuleCollider>();
+                    trackKnuckles = false;
+
+                    Destroy(leftKnuckleTracker.gameObject);
+                    Destroy(rightKnuckleTracker.gameObject);
+
+                    if (physicalKnuckles)
+                    {
+                        physicalKnuckles = false;
+
+                        Destroy(leftKnuckleCollisionProxy.gameObject);
+                        Destroy(rightKnuckleCollisionProxy.gameObject);
+                    }
                 }
 
-                physicalFeet = trackFeet && leftFootPhysicsCollider && rightFootPhysicsCollider;
-
-                physicalHands = trackHands && leftKnucklePhysicsCollider && rightKnucklePhysicsCollider;
-            }
-            else
-            {
-                trackHands = false;
-
-                trackKnuckles = false;
-
-                trackIndexFingers = false;
-
-                trackFeet = false;
-            }
-
-            if (trackHead)
-            {
-                SetGameObjectActive(headTracker, true);
-            }
-
-            if (trackHands)
-            {
-                SetGameObjectActive(leftHandTracker, true);
-                SetGameObjectActive(rightHandTracker, true);
-            }
-
-            if (trackIndexFingers)
-            {
-                SetGameObjectActive(leftIndexFingerTracker, true);
-                SetGameObjectActive(rightIndexFingerTracker, true);
-            }
-
-            if (trackKnuckles)
-            {
-                SetGameObjectActive(leftKnuckleTracker, true);
-                SetGameObjectActive(rightKnuckleTracker, true);
-
-                if (physicalHands)
+                if (trackFeet)
                 {
-                    SetGameObjectActive(leftKnuckleCollider, true);
-                    SetGameObjectActive(rightKnuckleCollider, true);
-                }
-            }
+                    trackFeet = false;
 
-            if (trackFeet)
-            {
-                SetGameObjectActive(leftFootTracker, true);
-                SetGameObjectActive(rightFootTracker, true);
+                    Destroy(leftFootTracker.gameObject);
+                    Destroy(rightFootTracker.gameObject);
 
-                if (physicalFeet)
-                {
-                    SetGameObjectActive(leftFootCollider, true);
-                    SetGameObjectActive(rightFootCollider, true);
+                    if (physicalFeet)
+                    {
+                        physicalFeet = false;
+
+                        Destroy(leftFootCollisionProxy.gameObject);
+                        Destroy(rightFootCollisionProxy.gameObject);
+                    }
                 }
             }
         }
 
         private void FixedUpdate()
         {
-            if (physicalHands)
+            if (physicalKnuckles)
             {
-                leftKnucklePhysicsCollider.MovePosition(leftKnuckleTracker.position);
-                leftKnucklePhysicsCollider.MoveRotation(leftKnuckleTracker.rotation);
+                leftKnuckleCollisionProxy.MovePosition(leftKnuckleTracker.position);
+                leftKnuckleCollisionProxy.MoveRotation(leftKnuckleTracker.rotation);
 
-                rightKnucklePhysicsCollider.MovePosition(rightKnuckleTracker.position);
-                rightKnucklePhysicsCollider.MoveRotation(rightKnuckleTracker.rotation);
+                rightKnuckleCollisionProxy.MovePosition(rightKnuckleTracker.position);
+                rightKnuckleCollisionProxy.MoveRotation(rightKnuckleTracker.rotation);
             }
 
             if (physicalFeet)
             {
-                leftFootPhysicsCollider.MovePosition(leftFootTracker.position);
-                leftFootPhysicsCollider.MoveRotation(leftFootTracker.rotation);
+                leftFootCollisionProxy.MovePosition(leftFootTracker.position);
+                leftFootCollisionProxy.MoveRotation(leftFootTracker.rotation);
 
-                rightFootPhysicsCollider.MovePosition(rightFootTracker.position);
-                rightFootPhysicsCollider.MoveRotation(rightFootTracker.rotation);
+                rightFootCollisionProxy.MovePosition(rightFootTracker.position);
+                rightFootCollisionProxy.MoveRotation(rightFootTracker.rotation);
             }
         }
 
@@ -529,6 +507,12 @@ namespace Varneon.VUdon.PlayerTracker
 
                 ApplyFingerColliderProperties(leftKnuckleCollider, fingerRadius * 2f, leftDistance);
                 ApplyFingerColliderProperties(rightKnuckleCollider, fingerRadius * 2f, rightDistance);
+
+                if (physicalKnuckles)
+                {
+                    ApplyFingerColliderProperties(leftKnucklePhysicsCollider, fingerRadius * 2f, leftDistance);
+                    ApplyFingerColliderProperties(rightKnucklePhysicsCollider, fingerRadius * 2f, rightDistance);
+                }
             }
 
             if (trackFeet)
@@ -542,6 +526,12 @@ namespace Varneon.VUdon.PlayerTracker
 
                 ApplyFingerColliderProperties(leftFootCollider, footRadius, leftDistance);
                 ApplyFingerColliderProperties(rightFootCollider, footRadius, rightDistance);
+
+                if (physicalFeet)
+                {
+                    ApplyFingerColliderProperties(leftFootPhysicsCollider, footRadius, leftDistance);
+                    ApplyFingerColliderProperties(rightFootPhysicsCollider, footRadius, rightDistance);
+                }
             }
 
             if (trackHead && headCollider)
@@ -596,7 +586,7 @@ namespace Varneon.VUdon.PlayerTracker
         {
             foreach(GameObject visualizer in visualizers)
             {
-                visualizer.SetActive(active);
+                if (visualizer) { visualizer.SetActive(active); }
             }
         }
 
@@ -655,35 +645,104 @@ namespace Varneon.VUdon.PlayerTracker
             }
         }
 
-        [UnityEditor.Callbacks.PostProcessScene(-1)]
-        private static void InitializeOnBuild()
+        private void InitializeOnBuild()
         {
-            GameObject[] sceneRoots = UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects();
-
-            foreach (ConfigurablePlayerTracker tracker in sceneRoots.SelectMany(r => r.GetComponentsInChildren<ConfigurablePlayerTracker>(true)))
+            if (trackHead = trackHead && headTracker)
             {
-                if (!tracker.headTriggersInteractions)
-                {
-                    Transform headTracker = tracker.headTracker;
+                smoothHeadRotation = HeadProxyRotationSmoothing && headTrackerSmoothedProxy != null;
 
+                headCollider = headTracker.GetComponent<SphereCollider>();
+
+                if (!headTriggersInteractions)
+                {
                     DestroyImmediate(headTracker.GetComponent<InteractTracker>());
                     DestroyImmediate(headTracker.GetComponent<Collider>());
                     DestroyImmediate(headTracker.GetComponent<Rigidbody>());
+                    DestroyImmediate(headTracker.GetComponentInChildren<SphereColliderVisualizer>(true).gameObject);
                 }
+            }
+            else
+            {
+                DestroyImmediate(headTracker.gameObject);
+            }
 
-                ColliderVisualizer[] visualizers = tracker.GetComponentsInChildren<ColliderVisualizer>(true);
+            if(!(trackHands = trackHands && leftHandTracker && rightHandTracker))
+            {
+                DestroyImmediate(leftHandTracker.gameObject);
+                DestroyImmediate(rightHandTracker.gameObject);
+            }
 
-                foreach(ColliderVisualizer visualizer in visualizers)
-                {
-                    visualizer.InitializeOnBuild();
-                }
+            if (trackIndexFingers = trackIndexFingers && leftIndexFingerTracker && rightIndexFingerTracker)
+            {
+                leftIndexCollider = leftIndexFingerTracker.GetComponent<CapsuleCollider>();
+                rightIndexCollider = rightIndexFingerTracker.GetComponent<CapsuleCollider>();
+            }
+            else
+            {
+                DestroyImmediate(leftIndexFingerTracker.gameObject);
+                DestroyImmediate(rightIndexFingerTracker.gameObject);
+            }
 
-                tracker.visualizers = visualizers.Select(v => v.gameObject).ToArray();
+            if (trackKnuckles = trackKnuckles && leftKnuckleTracker && rightKnuckleTracker)
+            {
+                leftKnuckleCollider = leftKnuckleTracker.GetComponent<CapsuleCollider>();
+                rightKnuckleCollider = rightKnuckleTracker.GetComponent<CapsuleCollider>();
+            }
+            else
+            {
+                DestroyImmediate(leftKnuckleTracker.gameObject);
+                DestroyImmediate(rightKnuckleTracker.gameObject);
+            }
 
-                for(int i = 0; i < tracker.transform.childCount; i++)
-                {
-                    tracker.transform.GetChild(i).gameObject.SetActive(false);
-                }
+            if (physicalKnuckles = physicalKnuckles && trackKnuckles && leftKnuckleCollisionProxy && rightKnuckleCollisionProxy)
+            {
+                leftKnucklePhysicsCollider = leftKnuckleCollisionProxy.GetComponent<CapsuleCollider>();
+                rightKnucklePhysicsCollider = rightKnuckleCollisionProxy.GetComponent<CapsuleCollider>();
+            }
+            else
+            {
+                DestroyImmediate(leftKnuckleCollisionProxy.gameObject);
+                DestroyImmediate(rightKnuckleCollisionProxy.gameObject);
+            }
+
+            if (trackFeet = trackFeet && leftFootTracker && rightFootTracker)
+            {
+                leftFootCollider = leftFootTracker.GetComponent<CapsuleCollider>();
+                rightFootCollider = rightFootTracker.GetComponent<CapsuleCollider>();
+            }
+            else
+            {
+                DestroyImmediate(leftFootTracker.gameObject);
+                DestroyImmediate(rightFootTracker.gameObject);
+            }
+
+            if (physicalFeet = physicalFeet && trackFeet && leftFootCollisionProxy && rightFootCollisionProxy)
+            {
+                leftFootPhysicsCollider = leftFootCollisionProxy.GetComponent<CapsuleCollider>();
+                rightFootPhysicsCollider = rightFootCollisionProxy.GetComponent<CapsuleCollider>();
+            }
+            else
+            {
+                DestroyImmediate(leftFootCollisionProxy.gameObject);
+                DestroyImmediate(rightFootCollisionProxy.gameObject);
+            }
+
+            ColliderVisualizer[] visualizers = GetComponentsInChildren<ColliderVisualizer>(true);
+
+            foreach (ColliderVisualizer visualizer in visualizers)
+            {
+                visualizer.InitializeOnBuild();
+            }
+
+            this.visualizers = visualizers.Select(v => v.gameObject).ToArray();
+        }
+
+        [UnityEditor.Callbacks.PostProcessScene(-1)]
+        private static void InitializeTrackersOnBuild()
+        {
+            foreach (ConfigurablePlayerTracker tracker in FindObjectsOfType<ConfigurablePlayerTracker>(true))
+            {
+                tracker.InitializeOnBuild();
             }
         }
 #endif

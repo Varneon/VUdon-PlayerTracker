@@ -217,7 +217,7 @@ namespace Varneon.VUdon.PlayerTracker.Editor
 
                         Handles.BeginGUI();
 
-                        string leftKnuckleLabelText = string.Concat("[", tracker.leftKnuckleTracker.name, "]\n\nPhysical collisions: ", tracker.physicalHands);
+                        string leftKnuckleLabelText = string.Concat("[", tracker.leftKnuckleTracker.name, "]\n\nPhysical collisions: ", tracker.physicalKnuckles);
 
                         DrawLabel(leftKnuckleLabelPos, leftKnuckleLabelText, KNUCKLE_TOOLTIP, new Vector2(leftOffsetMultiplier, 0f), tracker.leftKnuckleTracker);
 
@@ -246,7 +246,7 @@ namespace Varneon.VUdon.PlayerTracker.Editor
 
                         Handles.BeginGUI();
 
-                        string rightKnuckleLabelText = string.Concat("[", tracker.rightKnuckleTracker.name, "]\n\nPhysical collisions: ", tracker.physicalHands);
+                        string rightKnuckleLabelText = string.Concat("[", tracker.rightKnuckleTracker.name, "]\n\nPhysical collisions: ", tracker.physicalKnuckles);
 
                         DrawLabel(rightKnuckleLabelPos, rightKnuckleLabelText, KNUCKLE_TOOLTIP, new Vector2(rightOffsetMultiplier, 0f), tracker.rightKnuckleTracker);
 
