@@ -313,20 +313,14 @@ namespace Varneon.VUdon.PlayerTracker
         {
             if (physicalKnuckles)
             {
-                leftKnuckleCollisionProxy.MovePosition(leftKnuckleTracker.position);
-                leftKnuckleCollisionProxy.MoveRotation(leftKnuckleTracker.rotation);
-
-                rightKnuckleCollisionProxy.MovePosition(rightKnuckleTracker.position);
-                rightKnuckleCollisionProxy.MoveRotation(rightKnuckleTracker.rotation);
+                leftKnuckleCollisionProxy.Move(leftKnuckleTracker.position, leftKnuckleTracker.rotation);
+                rightKnuckleCollisionProxy.Move(rightKnuckleTracker.position, rightKnuckleTracker.rotation);
             }
 
             if (physicalFeet)
             {
-                leftFootCollisionProxy.MovePosition(leftFootTracker.position);
-                leftFootCollisionProxy.MoveRotation(leftFootTracker.rotation);
-
-                rightFootCollisionProxy.MovePosition(rightFootTracker.position);
-                rightFootCollisionProxy.MoveRotation(rightFootTracker.rotation);
+                leftFootCollisionProxy.Move(leftFootTracker.position, leftFootTracker.rotation);
+                rightFootCollisionProxy.Move(rightFootTracker.position, rightFootTracker.rotation);
             }
         }
 
