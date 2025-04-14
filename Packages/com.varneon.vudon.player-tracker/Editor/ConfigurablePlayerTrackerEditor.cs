@@ -12,7 +12,7 @@ namespace Varneon.VUdon.PlayerTracker.Editor
 
         private ConfigurablePlayerTracker tracker;
 
-        protected override string FoldoutPersistenceKey => "Varneon/VUdon/PlayerTracker/ConfigurablePlayerTracker/Editor/Foldouts";
+        protected override string PersistenceKey => "Varneon/VUdon/PlayerTracker/ConfigurablePlayerTracker/Editor/Foldouts";
 
         protected override InspectorHeader Header => new InspectorHeaderBuilder()
             .WithIcon(headerIcon)
