@@ -249,6 +249,8 @@ namespace Varneon.VUdon.PlayerTracker
 
         private readonly Vector3 VECTOR3_ZERO = Vector3.zero;
 
+        private readonly Quaternion QUATERNION_IDENTITY = Quaternion.identity;
+
         /// <summary>
         /// Reference to VRCSDK's default robot avatar mesh to be displayed in the editor as an example for where the trackers will be located on the player's body
         /// </summary>
@@ -383,7 +385,7 @@ namespace Varneon.VUdon.PlayerTracker
 
                         //curlAngle = GetCurlAngle(intermediate, distal, distal + localPlayer.GetBoneRotation(HumanBodyBones.RightIndexIntermediate) * Vector3.forward);
 
-                        CalculateFingerTracker(rightIndexFingerTracker, intermediate, distal, Quaternion.identity);
+                        CalculateFingerTracker(rightIndexFingerTracker, intermediate, distal, QUATERNION_IDENTITY);
                     }
                 }
 
@@ -405,7 +407,7 @@ namespace Varneon.VUdon.PlayerTracker
 
                         //curlAngle = GetCurlAngle(intermediate, distal, distal + localPlayer.GetBoneRotation(HumanBodyBones.LeftIndexIntermediate) * Vector3.forward);
 
-                        CalculateFingerTracker(leftIndexFingerTracker, intermediate, distal, Quaternion.identity);
+                        CalculateFingerTracker(leftIndexFingerTracker, intermediate, distal, QUATERNION_IDENTITY);
                     }
                 }
             }
