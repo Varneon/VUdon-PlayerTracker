@@ -1,5 +1,6 @@
 {
     "name": "Varneon.VUdon.PlayerTracker.Editor",
+    "rootNamespace": "Varneon.VUdon.PlayerTracker.Editor",
     "references": [
         "Varneon.VUdon.PlayerTracker.Runtime",
         "Varneon.VUdon.Editors.Editor",
