@@ -492,8 +492,8 @@ namespace Varneon.VUdon.PlayerTracker
 
                 Log("Apply Index Finger Collider Properties");
 
-                ApplyFingerColliderProperties(leftIndexCollider, fingerRadius, leftDistance * 2f, visualizers[1]);
-                ApplyFingerColliderProperties(rightIndexCollider, fingerRadius, rightDistance * 2f, visualizers[2]);
+                ApplyColliderProperties(leftIndexCollider, fingerRadius, leftDistance * 2f, visualizers[1]);
+                ApplyColliderProperties(rightIndexCollider, fingerRadius, rightDistance * 2f, visualizers[2]);
             }
 
             if (trackKnuckles)
@@ -503,13 +503,13 @@ namespace Varneon.VUdon.PlayerTracker
 
                 Log("Apply Knuckle Collider Properties");
 
-                ApplyFingerColliderProperties(leftKnuckleCollider, fingerRadius * 2f, leftDistance, visualizers[3]);
-                ApplyFingerColliderProperties(rightKnuckleCollider, fingerRadius * 2f, rightDistance, visualizers[4]);
+                ApplyColliderProperties(leftKnuckleCollider, fingerRadius * 2f, leftDistance, visualizers[3]);
+                ApplyColliderProperties(rightKnuckleCollider, fingerRadius * 2f, rightDistance, visualizers[4]);
 
                 if (physicalKnuckles)
                 {
-                    ApplyFingerColliderProperties(leftKnucklePhysicsCollider, fingerRadius * 2f, leftDistance);
-                    ApplyFingerColliderProperties(rightKnucklePhysicsCollider, fingerRadius * 2f, rightDistance);
+                    ApplyColliderProperties(leftKnucklePhysicsCollider, fingerRadius * 2f, leftDistance);
+                    ApplyColliderProperties(rightKnucklePhysicsCollider, fingerRadius * 2f, rightDistance);
                 }
             }
 
@@ -522,13 +522,13 @@ namespace Varneon.VUdon.PlayerTracker
 
                 Log("Apply Foot Collider Properties");
 
-                ApplyFingerColliderProperties(leftFootCollider, footRadius, leftDistance, visualizers[5]);
-                ApplyFingerColliderProperties(rightFootCollider, footRadius, rightDistance, visualizers[6]);
+                ApplyColliderProperties(leftFootCollider, footRadius, leftDistance, visualizers[5]);
+                ApplyColliderProperties(rightFootCollider, footRadius, rightDistance, visualizers[6]);
 
                 if (physicalFeet)
                 {
-                    ApplyFingerColliderProperties(leftFootPhysicsCollider, footRadius, leftDistance);
-                    ApplyFingerColliderProperties(rightFootPhysicsCollider, footRadius, rightDistance);
+                    ApplyColliderProperties(leftFootPhysicsCollider, footRadius, leftDistance);
+                    ApplyColliderProperties(rightFootPhysicsCollider, footRadius, rightDistance);
                 }
             }
 
@@ -545,7 +545,7 @@ namespace Varneon.VUdon.PlayerTracker
             EnableVisualizers();
         }
 
-        private static void ApplyFingerColliderProperties(CapsuleCollider collider, float radius, float distance, LineRenderer visualizer = null)
+        private static void ApplyColliderProperties(CapsuleCollider collider, float radius, float distance, LineRenderer visualizer = null)
         {
             float diameter = radius * 2f;
 
