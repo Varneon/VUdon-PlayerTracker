@@ -180,9 +180,11 @@ namespace Varneon.VUdon.PlayerTracker
         /// Tracker visualizers which will be visible for couple seconds every time an avatar changes and the tracker recalibrates
         /// </summary>
         [SerializeField, HideInInspector]
-        private GameObject[] visualizers;
+        private LineRenderer[] visualizers;
 
         private Quaternion lastHeadProxyRotation;
+
+        private Vector3 vector3Temp;
 
         /// <summary>
         /// Is the current avatar of the local player not humanoid
@@ -490,8 +492,8 @@ namespace Varneon.VUdon.PlayerTracker
 
                 Log("Apply Index Finger Collider Properties");
 
-                ApplyFingerColliderProperties(leftIndexCollider, fingerRadius, leftDistance * 2f);
-                ApplyFingerColliderProperties(rightIndexCollider, fingerRadius, rightDistance * 2f);
+                ApplyFingerColliderProperties(leftIndexCollider, fingerRadius, leftDistance * 2f, visualizers[1]);
+                ApplyFingerColliderProperties(rightIndexCollider, fingerRadius, rightDistance * 2f, visualizers[2]);
             }
 
             if (trackKnuckles)
@@ -501,8 +503,8 @@ namespace Varneon.VUdon.PlayerTracker
 
                 Log("Apply Knuckle Collider Properties");
 
-                ApplyFingerColliderProperties(leftKnuckleCollider, fingerRadius * 2f, leftDistance);
-                ApplyFingerColliderProperties(rightKnuckleCollider, fingerRadius * 2f, rightDistance);
+                ApplyFingerColliderProperties(leftKnuckleCollider, fingerRadius * 2f, leftDistance, visualizers[3]);
+                ApplyFingerColliderProperties(rightKnuckleCollider, fingerRadius * 2f, rightDistance, visualizers[4]);
 
                 if (physicalKnuckles)
                 {
@@ -520,8 +522,8 @@ namespace Varneon.VUdon.PlayerTracker
 
                 Log("Apply Foot Collider Properties");
 
-                ApplyFingerColliderProperties(leftFootCollider, footRadius, leftDistance);
-                ApplyFingerColliderProperties(rightFootCollider, footRadius, rightDistance);
+                ApplyFingerColliderProperties(leftFootCollider, footRadius, leftDistance, visualizers[5]);
+                ApplyFingerColliderProperties(rightFootCollider, footRadius, rightDistance, visualizers[6]);
 
                 if (physicalFeet)
                 {
@@ -532,20 +534,35 @@ namespace Varneon.VUdon.PlayerTracker
 
             if (trackHead && headCollider)
             {
-                headCollider.radius = newPlayerScale * 0.1f;
+                float radius = newPlayerScale * 0.1f;
+
+                headCollider.radius = radius;
                 headCollider.center = new Vector3(0f, -0.02f, -0.08f) * newPlayerScale;
+
+                visualizers[0].widthMultiplier = radius * 2f;
             }
 
             EnableVisualizers();
         }
 
-        private static void ApplyFingerColliderProperties(CapsuleCollider collider, float radius, float distance)
+        private static void ApplyFingerColliderProperties(CapsuleCollider collider, float radius, float distance, LineRenderer visualizer = null)
         {
+            float diameter = radius * 2f;
+
+            Vector3 distanceZVector = new Vector3(0f, 0f, -distance);
+
+            if(visualizer)
+            {
+                visualizer.widthMultiplier = diameter;
+
+                visualizer.SetPosition(1, distanceZVector);
+            }
+
             collider.radius = radius;
 
-            collider.height = distance + radius * 2f;
+            collider.height = distance + diameter;
 
-            collider.center = new Vector3(0f, 0f, -distance / 2f);
+            collider.center = distanceZVector / 2f;
         }
 
         private static void CalculateFingerTracker(Transform tracker, Vector3 intermediate, Vector3 distal, Quaternion curlAngle)
@@ -580,9 +597,9 @@ namespace Varneon.VUdon.PlayerTracker
 
         private void SetVisualizersActive(bool active)
         {
-            foreach(GameObject visualizer in visualizers)
+            foreach(LineRenderer visualizer in visualizers)
             {
-                if (visualizer) { visualizer.SetActive(active); }
+                if (visualizer) { visualizer.enabled = active; }
             }
         }
 
@@ -643,6 +660,8 @@ namespace Varneon.VUdon.PlayerTracker
 
         private void InitializeOnBuild()
         {
+            visualizers = GetComponentsInChildren<InteractTracker>(true).Select(t => t.Visualizer).ToArray();
+
             if (trackHead = trackHead && headTracker)
             {
                 smoothHeadRotation = HeadProxyRotationSmoothing && headTrackerSmoothedProxy != null;
@@ -654,7 +673,7 @@ namespace Varneon.VUdon.PlayerTracker
                     DestroyImmediate(headTracker.GetComponent<InteractTracker>());
                     DestroyImmediate(headTracker.GetComponent<Collider>());
                     DestroyImmediate(headTracker.GetComponent<Rigidbody>());
-                    DestroyImmediate(headTracker.GetComponentInChildren<SphereColliderVisualizer>(true).gameObject);
+                    DestroyImmediate(headTracker.GetComponent<LineRenderer>());
                 }
             }
             else
@@ -722,15 +741,6 @@ namespace Varneon.VUdon.PlayerTracker
                 DestroyImmediate(leftFootCollisionProxy.gameObject);
                 DestroyImmediate(rightFootCollisionProxy.gameObject);
             }
-
-            ColliderVisualizer[] visualizers = GetComponentsInChildren<ColliderVisualizer>(true);
-
-            foreach (ColliderVisualizer visualizer in visualizers)
-            {
-                visualizer.InitializeOnBuild();
-            }
-
-            this.visualizers = visualizers.Select(v => v.gameObject).ToArray();
         }
 
         [UnityEditor.Callbacks.PostProcessScene(-1)]

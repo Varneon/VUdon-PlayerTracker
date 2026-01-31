@@ -1,9 +1,12 @@
-﻿using Varneon.VUdon.PlayerTracker.Abstract;
+﻿using UnityEngine;
+using Varneon.VUdon.PlayerTracker.Abstract;
 
 namespace Varneon.VUdon.PlayerTracker
 {
     public class InteractTracker : Abstract.InteractTracker
     {
+        public LineRenderer Visualizer;
+
         protected override void OnInteractTrackerEntered(TouchReceiver receiver)
         {
             base.OnInteractTrackerEntered(receiver);
